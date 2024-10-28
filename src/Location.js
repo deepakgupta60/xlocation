@@ -66,11 +66,11 @@ const Location = () => {
         
         <div style={{display:"flex", justifyContent:"center", alignContent:"center", marginTop:"50px", marginLeft:"50px"}}>
             <select onChange={handleCountryChange} value={selectedCountry}>
-                <option>choose country</option>
+                <option>Select Country</option>
                 {
                     countryData.length > 0 ? countryData.map((data, idx) => (
                         <option key={idx}>{data}</option>
-                    )) : <option>no country </option>
+                    )) : null
                 }
 
             </select>
@@ -78,22 +78,22 @@ const Location = () => {
             <br/>
 
             <select onChange={handleStateChange} value={selectedState} disabled={!selectedCountry}>
-            <option>choose state</option>
+            <option>Select State</option>
                 {
                     stateData.length > 0 ? stateData.map((data, idx) => (
                         <option key={idx}>{data}</option>
-                    )) : <option>no state </option>
+                    )) : null
                 }
             </select>
 
             <br/>
 
             <select onChange={handleCityChange} value={selectedCity} disabled={!selectedState}>
-            <option>choose city</option>
+            <option>Select City</option>
                 {
                     cityData.length > 0 ? cityData.map((data, idx) => (
                         <option key={idx}>{data}</option>
-                    )) : <option>no city </option>
+                    )) : null
                 }
             </select>
 
