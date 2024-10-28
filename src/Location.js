@@ -2,65 +2,109 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 
 const Location = () => {
-    const [selectedCountry, setSelectedCountry] = useState("")
-    const [selectedState, setSelectedState] = useState("")
-    const [selectedCity, setSelectedCity] = useState("")
 
     const [countryData, setCountryData] = useState([])
-    const [stateData, setStateData] = useState([])
-    const [cityData, setCityData] = useState([])
+    const [selectedCountry, setSelectedCountry] = useState("")
 
+    const [stateData, setStateData]=useState([])
+    const [selectedState, setSelectedState]=useState("")
+
+
+
+    const [cityData, setCityData]=useState([])
+    const [selectedCity, setSelectedCity]=useState("")
+
+    const [msg, setMsg]=useState(false)
 
     useEffect(() => {
         const fetchCountry = async () => {
-            let response = await axios.get('https://crio-location-selector.onrender.com/countries')
+            const response = await axios.get('https://crio-location-selector.onrender.com/countries')
             setCountryData(response.data)
         }
         fetchCountry()
     }, [])
 
-    useEffect(()=>{
-        fetchState(selectedCountry)
-    },[selectedCountry])
-
-    const handleCountryChange = (e) => {
-        selectedCountry(e.target.value)
-    }
-
-    const handleStateChange=()=>{
-        
-    }
-    const handleCityChange=()=>{
-
-    }
     const fetchState = async (country) => {
-        let response = await axios.get(`https://crio-location-selector.onrender.com/country=${country}/states`);
+        const response = await axios.get(`https://crio-location-selector.onrender.com/country=${country}/states`)
         setStateData(response.data)
     }
-    const fetchCity = async (country, state) => {
-        let response = await axios.get(`https://crio-location-selector.onrender.com/country=${country}/state=${state}/cities`)
+
+    const handleCountryChange = (e) => {
+        setSelectedCountry(e.target.value)
+        fetchState(e.target.value);
+        setSelectedCity("")
+        setSelectedState("")
+
+    }
+
+
+    const fetchCity = async (state,country) => {
+        const response = await axios.get(`https://crio-location-selector.onrender.com/country=${country}/state=${state}/cities`)
         setCityData(response.data)
     }
 
+    const handleStateChange=(e)=>{
+        setSelectedState(e.target.value);
+        fetchCity(e.target.value, selectedCountry)
+        setSelectedCity("")
+    }
+
+
+    const handleCityChange=(e)=>{
+        setSelectedCity(e.target.value)
+        setMsg(true)
+    }
+
+
+
     return (
-        <>
-            <select onChange={handleCountryChange}>
-                <option>Select Country</option>
-                {countryData.length > 0 ? countryData.map((data) => <option>{data}</option>) : <option>Not found country</option>}
-            </select> <br/>
+
+        <div>
 
 
-            <select onChange={handleStateChange}>
-                <option>Select State</option>
-                {stateData.length > 0 ? stateData.map((data) => <option>{data}</option>) : <option>Not found State</option>}
+        <h1 style={{textAlign:"center"}}>Select Location</h1>
+        
+        <div style={{display:"flex", justifyContent:"center", alignContent:"center", marginTop:"50px", marginLeft:"50px"}}>
+            <select onChange={handleCountryChange} value={selectedCountry}>
+                <option>choose country</option>
+                {
+                    countryData.length > 0 ? countryData.map((data, idx) => (
+                        <option key={idx}>{data}</option>
+                    )) : <option>no country </option>
+                }
+
             </select>
-        <br/>
-            <select onChange={handleCityChange}>
-                <option>Select State</option>
-                {stateData.length > 0 ? stateData.map((data) => <option>{data}</option>) : <option>Not found State</option>}
+
+            <br/>
+
+            <select onChange={handleStateChange} value={selectedState} disabled={!selectedCountry}>
+            <option>choose state</option>
+                {
+                    stateData.length > 0 ? stateData.map((data, idx) => (
+                        <option key={idx}>{data}</option>
+                    )) : <option>no state </option>
+                }
             </select>
 
-        </>
+            <br/>
+
+            <select onChange={handleCityChange} value={selectedCity} disabled={!selectedState}>
+            <option>choose city</option>
+                {
+                    cityData.length > 0 ? cityData.map((data, idx) => (
+                        <option key={idx}>{data}</option>
+                    )) : <option>no city </option>
+                }
+            </select>
+
+
+            </div>
+
+            <div style={{marginTop:"20px"}}>
+
+        {msg && `You Selected ${selectedCountry}, ${selectedState}, ${selectedCity}`}
+            </div>
+        </div>
     )
 }
 
