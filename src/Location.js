@@ -1,5 +1,8 @@
 import axios from 'axios';
+import { enqueueSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react'
+
+
 
 const Location = () => {
 
@@ -22,10 +25,12 @@ const Location = () => {
 
                 const response = await axios.get(`https://crio-location-selector.onrender.com/countries`)
                 setCountries(response.data)
+                setSelectedState("")
+                setSelectedCity("")
 
             }
             catch (err) {
-                console.log("Error while fetching countries: ", err)
+                enqueueSnackbar("Error while fetching countries: ", {variant:"error"})
             }
             finally{
                 setLoading(false)
@@ -40,9 +45,8 @@ const Location = () => {
             axios.get(`https://crio-location-selector.onrender.com/country=${selectedCountry}/states`).then((response) => {
                 setStates(response.data)
                 setSelectedState("")
-                setCities([])
                 setSelectedCity("")
-            }).catch((error) => console.log("Error while fetching state: ", error)).finally(()=>{
+            }).catch((error) => enqueueSnackbar("Error while fetching states: ", {variant:"error"})).finally(()=>{
                 setLoading(false)
             })
         }
@@ -55,7 +59,7 @@ const Location = () => {
             axios.get(`https://crio-location-selector.onrender.com/country=${selectedCountry}/state=${selectedState}/cities`).then((response) => {
                 setCities(response.data)
                 setSelectedCity("")
-            }).catch((error) => console.log("Error while fetching city: ", error)).finally(()=>{
+            }).catch((error) => enqueueSnackbar("Error while fetching city: ", {variant:"error"})).finally(()=>{
                 setLoading(false)
             })
 
