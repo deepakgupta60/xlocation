@@ -6,15 +6,15 @@ const Location = () => {
     const [countryData, setCountryData] = useState([])
     const [selectedCountry, setSelectedCountry] = useState("")
 
-    const [stateData, setStateData]=useState([])
-    const [selectedState, setSelectedState]=useState("")
+    const [stateData, setStateData] = useState([])
+    const [selectedState, setSelectedState] = useState("")
 
 
 
-    const [cityData, setCityData]=useState([])
-    const [selectedCity, setSelectedCity]=useState("")
+    const [cityData, setCityData] = useState([])
+    const [selectedCity, setSelectedCity] = useState("")
 
-    const [msg, setMsg]=useState(false)
+    const [msg, setMsg] = useState(false)
 
     useEffect(() => {
         const fetchCountry = async () => {
@@ -38,71 +38,68 @@ const Location = () => {
     }
 
 
-    const fetchCity = async (state,country) => {
+    const fetchCity = async (state, country) => {
         const response = await axios.get(`https://crio-location-selector.onrender.com/country=${country}/state=${state}/cities`)
         setCityData(response.data)
     }
 
-    const handleStateChange=(e)=>{
+    const handleStateChange = (e) => {
         setSelectedState(e.target.value);
         fetchCity(e.target.value, selectedCountry)
         setSelectedCity("")
     }
 
 
-    const handleCityChange=(e)=>{
+    const handleCityChange = (e) => {
         setSelectedCity(e.target.value)
         setMsg(true)
     }
-
-
 
     return (
 
         <div>
 
+            <h1 style={{ textAlign: "center" }}>Select Location</h1>
 
-        <h1 style={{textAlign:"center"}}>Select Location</h1>
-        
-        <div style={{display:"flex", justifyContent:"center", alignContent:"center", marginTop:"50px", marginLeft:"50px"}}>
-            <select onChange={handleCountryChange} value={selectedCountry}>
-                <option>Select Country</option>
-                {
-                    countryData.length > 0 ? countryData.map((data, idx) => (
-                        <option key={idx}>{data}</option>
-                    )) : null
-                }
+            <div style={{ display: "flex", justifyContent: "center", alignContent: "center", marginTop: "50px", marginLeft: "50px" }}>
+                <select onChange={handleCountryChange} value={selectedCountry}>
+                    <option>Select Country</option>
+                    {
+                        countryData.length > 0 ? countryData.map((data, idx) => (
+                            <option key={idx}>{data}</option>
+                        )) : null
+                    }
 
-            </select>
+                </select>
 
-            <br/>
+                <br />
 
-            <select onChange={handleStateChange} value={selectedState} disabled={!selectedCountry}>
-            <option>Select State</option>
-                {
-                    stateData.length > 0 ? stateData.map((data, idx) => (
-                        <option key={idx}>{data}</option>
-                    )) : null
-                }
-            </select>
+                <select onChange={handleStateChange} value={selectedState} disabled={!selectedCountry}>
+                    <option>Select State</option>
+                    {
+                        stateData.length > 0 ? stateData.map((data, idx) => (
+                            <option key={idx}>{data}</option>
+                        )) : null
+                    }
+                </select>
 
-            <br/>
+                <br />
 
-            <select onChange={handleCityChange} value={selectedCity} disabled={!selectedState}>
-            <option>Select City</option>
-                {
-                    cityData.length > 0 ? cityData.map((data, idx) => (
-                        <option key={idx}>{data}</option>
-                    )) : null
-                }
-            </select>
+                <select onChange={handleCityChange} value={selectedCity} disabled={!selectedState}>
+                    <option>Select City</option>
+                    {
+                        cityData.length > 0 ? cityData.map((data, idx) => (
+                            <option key={idx}>{data}</option>
+                        )) : null
+                    }
+                </select>
 
 
             </div>
 
-            <div style={{marginTop:"20px"}}>
+            <div style={{ marginTop: "20px" }}>
 
-        {msg && `You Selected ${selectedCountry}, ${selectedState}, ${selectedCity}`}
+                {msg && `You Selected ${selectedCountry}, ${selectedState}, ${selectedCity}`}
             </div>
         </div>
     )
