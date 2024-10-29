@@ -18,15 +18,30 @@ const Location = () => {
 
     useEffect(() => {
         const fetchCountry = async () => {
-            const response = await axios.get('https://crio-location-selector.onrender.com/countries')
-            setCountryData(response.data)
+            
+            try{
+
+                const response = await axios.get('https://crio-location-selector.onrender.com/countries')
+                setCountryData(response.data)
+            }
+            catch(error)
+            {
+                console.log("Error fetching countries:", error)
+            }
         }
         fetchCountry()
     }, [])
 
     const fetchState = async (country) => {
-        const response = await axios.get(`https://crio-location-selector.onrender.com/country=${country}/states`)
-        setStateData(response.data)
+        try{
+            const response = await axios.get(`https://crio-location-selector.onrender.com/country=${country}/states`)
+            setStateData(response.data)
+
+        }
+        catch(error)
+        {
+            console.log("Error fetching state: ", error)
+        }
     }
 
     const handleCountryChange = (e) => {
@@ -39,8 +54,15 @@ const Location = () => {
 
 
     const fetchCity = async (state, country) => {
-        const response = await axios.get(`https://crio-location-selector.onrender.com/country=${country}/state=${state}/cities`)
-        setCityData(response.data)
+        try{
+            const response = await axios.get(`https://crio-location-selector.onrender.com/country=${country}/state=${state}/cities`)
+            setCityData(response.data)
+            selectedCity("")
+        }
+        catch(error)
+        {
+            console.log("Error fetching city: ", error)
+        }
     }
 
     const handleStateChange = (e) => {
@@ -75,7 +97,7 @@ const Location = () => {
                 <br />
 
                 <select onChange={handleStateChange} style={{marginLeft:"10px", marginRight:"10px"}} value={selectedState} disabled={!selectedCountry}>
-                    <option value={""}>Select State</option>
+                    <option value={""} disabled>Select State</option>
                     {
                         stateData.length > 0 ? stateData.map((data, idx) => (
                             <option key={idx}>{data}</option>
@@ -86,7 +108,7 @@ const Location = () => {
                 <br />
 
                 <select onChange={handleCityChange} style={{marginLeft:"10px", marginRight:"10px"}} value={selectedCity} disabled={!selectedState}>
-                    <option value={""}>Select City</option>
+                    <option value={""} disabled >Select City</option>
                     {
                         cityData.length > 0 ? cityData.map((data, idx) => (
                             <option key={idx}>{data}</option>
