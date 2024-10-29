@@ -17,6 +17,8 @@ const Location = () => {
 
     const [loading, setLoading]=useState(true)
 
+    const [error, setError]=useState(null)
+
     useEffect(() => {
         const fetchCountries = async () => {
             
@@ -30,7 +32,7 @@ const Location = () => {
 
             }
             catch (err) {
-                enqueueSnackbar("Error while fetching countries: ", {variant:"error"})
+                setError("Failed to load countries");
             }
             finally{
                 setLoading(false)
@@ -46,7 +48,7 @@ const Location = () => {
                 setStates(response.data)
                 setSelectedState("")
                 setSelectedCity("")
-            }).catch((error) => enqueueSnackbar("Error while fetching states: ", {variant:"error"})).finally(()=>{
+            }).catch((error) => setError("Failed to load states")).finally(()=>{
                 setLoading(false)
             })
         }
@@ -59,7 +61,7 @@ const Location = () => {
             axios.get(`https://crio-location-selector.onrender.com/country=${selectedCountry}/state=${selectedState}/cities`).then((response) => {
                 setCities(response.data)
                 setSelectedCity("")
-            }).catch((error) => enqueueSnackbar("Error while fetching city: ", {variant:"error"})).finally(()=>{
+            }).catch((error) => setError("Failed to load cities")).finally(()=>{
                 setLoading(false)
             })
 
@@ -67,6 +69,8 @@ const Location = () => {
     }, [selectedState, selectedCountry])
 
 if(loading) return <p>Loading...</p>
+
+if(error) return <p>{error}</p>
 
     return (
         <>
