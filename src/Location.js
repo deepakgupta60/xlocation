@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import "./Location.css"
+
 
 function XState() {
     const [countries, setCountries] = useState([]);
