@@ -62,8 +62,8 @@ const Location = () => {
             <h1 style={{ textAlign: "center" }}>Select Location</h1>
 
             <div style={{ display: "flex", justifyContent: "center", alignContent: "center", marginTop: "50px", marginLeft: "50px" }}>
-                <select onChange={handleCountryChange} value={selectedCountry}>
-                    <option>Select Country</option>
+                <select style={{marginLeft:"10px", marginRight:"10px"}} onChange={handleCountryChange} value={selectedCountry}>
+                    <option value={""}>Select Country</option>
                     {
                         countryData.length > 0 ? countryData.map((data, idx) => (
                             <option key={idx}>{data}</option>
@@ -74,8 +74,8 @@ const Location = () => {
 
                 <br />
 
-                <select onChange={handleStateChange} value={selectedState} disabled={!selectedCountry}>
-                    <option>Select State</option>
+                <select onChange={handleStateChange} style={{marginLeft:"10px", marginRight:"10px"}} value={selectedState} disabled={!selectedCountry}>
+                    <option value={""}>Select State</option>
                     {
                         stateData.length > 0 ? stateData.map((data, idx) => (
                             <option key={idx}>{data}</option>
@@ -85,8 +85,8 @@ const Location = () => {
 
                 <br />
 
-                <select onChange={handleCityChange} value={selectedCity} disabled={!selectedState}>
-                    <option>Select City</option>
+                <select onChange={handleCityChange} style={{marginLeft:"10px", marginRight:"10px"}} value={selectedCity} disabled={!selectedState}>
+                    <option value={""}>Select City</option>
                     {
                         cityData.length > 0 ? cityData.map((data, idx) => (
                             <option key={idx}>{data}</option>
